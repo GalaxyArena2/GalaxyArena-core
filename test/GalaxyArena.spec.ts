@@ -1,7 +1,7 @@
 require('dotenv').config();
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
-import { ethers } from 'hardhat';
+import { ethers, upgrades } from 'hardhat';
 import { GalaxyArena } from '../typechain';
 
 describe('GalaxyArena', () => {
@@ -13,7 +13,7 @@ describe('GalaxyArena', () => {
     accounts = await ethers.getSigners();
     owner = accounts[0].address;
     const factory = await ethers.getContractFactory('GalaxyArena');
-    ga = await factory.deploy();
+    ga = (await upgrades.deployProxy(factory, [])) as GalaxyArena;
   });
 
   describe('Setup tests', async () => {

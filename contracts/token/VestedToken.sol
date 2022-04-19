@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity 0.8.13;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
 struct VestingPeriod {
     uint256 cliff;
@@ -15,8 +14,8 @@ struct VestedBalance {
     uint256 amount; // in wei
 }
 
-abstract contract VestedToken is AccessControl, ERC20 {
-    uint256 vestingCounter;
+abstract contract VestedToken is ERC20Upgradeable {
+    uint256 private _vestingCounter;
     mapping(uint256 => VestingPeriod) public vestingPeriods;
     mapping(address => uint256) public vestingAdmins;
     mapping(address => VestedBalance) public vestedBalances;
@@ -24,18 +23,14 @@ abstract contract VestedToken is AccessControl, ERC20 {
     event VestingScheduleAdded(uint256 indexed vestingId, uint256 cliff, uint256 cliffAmount, uint256 duration);
     event VestedTokens(uint256 indexed vestingId, address indexed account, uint256 amount);
 
-    constructor() {
-        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    }
-
-    function setupVestingSchedule(
+    function _setupSchedule(
         uint256 cliff,
         uint256 cliffAmount,
         uint256 duration,
         address vestingAdmin
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) internal {
         require(cliffAmount <= 10000, "MAX_CLIFF");
-        uint256 vestingId = ++vestingCounter;
+        uint256 vestingId = ++_vestingCounter;
         vestingPeriods[vestingId] = VestingPeriod(cliff, cliffAmount, duration);
         require(vestingAdmins[vestingAdmin] == 0, "VESTING_ADMIN_ALREADY_SET");
         vestingAdmins[vestingAdmin] = vestingId;
@@ -76,4 +71,6 @@ abstract contract VestedToken is AccessControl, ERC20 {
             require(balanceOf(from) >= lockedTokens(from), "TOKENS_VESTED");
         }
     }
+
+    uint256[50] private __gap;
 }
