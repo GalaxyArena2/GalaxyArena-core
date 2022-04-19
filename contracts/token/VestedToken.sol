@@ -51,13 +51,11 @@ abstract contract VestedToken is AccessControl, ERC20 {
         VestingPeriod storage vestingPeriod = vestingPeriods[id];
         uint256 cliff = vestingPeriod.cliff;
         uint256 duration = vestingPeriod.duration;
-        if (cliff > block.timestamp) {
-            return amount;
-        } else if (block.timestamp >= cliff + duration) {
-            return 0;
-        }
-        uint256 cliffAmount = (amount * vestingPeriod.cliffAmount) / 10000;
-        uint256 vestedAmount = ((amount - cliffAmount) * (block.timestamp - cliff)) / duration;
+        if (cliff > block.timestamp) return amount;
+        if (block.timestamp >= cliff + duration) return 0;
+
+        uint256 cliffAmount = (amount * (10000 - vestingPeriod.cliffAmount)) / 10000;
+        uint256 vestedAmount = (cliffAmount * (block.timestamp - cliff)) / duration;
         return cliffAmount - vestedAmount;
     }
 
