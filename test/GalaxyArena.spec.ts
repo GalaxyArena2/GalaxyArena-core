@@ -18,9 +18,9 @@ describe('GalaxyArena', () => {
 
   describe('Setup tests', async () => {
     it('should set up token correctly', async () => {
-      expect(await ga.name()).to.equal('Galaxy Arena');
-      expect(await ga.symbol()).to.equal('GA');
-      expect(await ga.totalSupply()).to.equal(ethers.utils.parseEther('150000000'));
+      expect(await ga.name()).to.equal('Essence Token');
+      expect(await ga.symbol()).to.equal('ESNC');
+      expect(await ga.totalSupply()).to.equal(ethers.utils.parseEther('1000000000'));
     });
 
     it('should setup permissions correctly', async () => {

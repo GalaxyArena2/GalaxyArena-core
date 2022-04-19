@@ -4,7 +4,7 @@ pragma solidity 0.8.13;
 import "./VestedToken.sol";
 
 contract GalaxyArena is VestedToken {
-    constructor() ERC20("Galaxy Arena", "GA") {
-        _mint(msg.sender, 150000000 ether);
+    constructor() ERC20("Essence Token", "ESNC") {
+        _mint(msg.sender, 1000000000 ether);
     }
 }
