@@ -2,10 +2,10 @@ require('dotenv').config();
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { ethers, network, upgrades } from 'hardhat';
-import { GalaxyArena } from '../typechain';
+import { EssenceToken } from '../typechain';
 
-describe('GalaxyArena', () => {
-  let ga: GalaxyArena;
+describe('VestedToken', () => {
+  let ga: EssenceToken;
   let accounts: SignerWithAddress[];
   let timestamp = 2000000000;
   const week = 604800;
@@ -13,8 +13,8 @@ describe('GalaxyArena', () => {
 
   before(async () => {
     accounts = await ethers.getSigners();
-    const factory = await ethers.getContractFactory('GalaxyArena');
-    ga = (await upgrades.deployProxy(factory, [])) as GalaxyArena;
+    const factory = await ethers.getContractFactory('EssenceToken');
+    ga = (await upgrades.deployProxy(factory, [])) as EssenceToken;
   });
 
   describe('Create new vesting schedules', async () => {

@@ -2,18 +2,18 @@ require('dotenv').config();
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { ethers, upgrades } from 'hardhat';
-import { GalaxyArena } from '../typechain';
+import { EssenceToken } from '../typechain';
 
-describe('GalaxyArena', () => {
-  let ga: GalaxyArena;
+describe('EssenceToken', () => {
+  let ga: EssenceToken;
   let accounts: SignerWithAddress[];
   let owner: string;
 
   before(async () => {
     accounts = await ethers.getSigners();
     owner = accounts[0].address;
-    const factory = await ethers.getContractFactory('GalaxyArena');
-    ga = (await upgrades.deployProxy(factory, [])) as GalaxyArena;
+    const factory = await ethers.getContractFactory('EssenceToken');
+    ga = (await upgrades.deployProxy(factory, [])) as EssenceToken;
   });
 
   describe('Setup tests', async () => {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity 0.8.13;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
@@ -17,8 +17,8 @@ struct VestedBalance {
 abstract contract VestedToken is ERC20Upgradeable {
     uint256 private _vestingCounter;
     mapping(uint256 => VestingPeriod) public vestingPeriods;
-    mapping(address => uint256) public vestingAdmins;
     mapping(address => VestedBalance) public vestedBalances;
+    mapping(address => uint256) public vestingAdmins;
 
     event VestingScheduleAdded(uint256 indexed vestingId, uint256 cliff, uint256 cliffAmount, uint256 duration);
     event VestedTokens(uint256 indexed vestingId, address indexed account, uint256 amount);

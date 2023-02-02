@@ -17,12 +17,27 @@ const config: HardhatUserConfig =
             accounts: [process.env.DEV_PRIVATE_KEY as string],
             gasPrice: 8000000000,
           },
-          hardhat: {},
+          polygon: {
+            url: 'https://polygon-mainnet.infura.io/v3/' + process.env.INFURA_TOKEN,
+            accounts: {
+              mnemonic: process.env.MNEMONIC as string,
+            },
+            gasPrice: 80000000000,
+          },
+          hardhat: {
+            forking: {
+              url: 'https://polygon-mainnet.infura.io/v3/' + process.env.INFURA_TOKEN,
+            },
+            accounts: {
+              mnemonic: process.env.MNEMONIC as string,
+            },
+            gasPrice: 40000000000,
+          },
         },
         solidity: {
           compilers: [
             {
-              version: '0.8.13',
+              version: '0.8.17',
               settings: {
                 optimizer: {
                   enabled: true,
@@ -38,14 +53,14 @@ const config: HardhatUserConfig =
           enabled: process.env.REPORT_GAS === 'true',
         },
         etherscan: {
-          apiKey: process.env.ETHERSCAN_TOKEN,
+          apiKey: process.env.ETHERSCAN_TOKEN as string,
         },
       }
     : {
         solidity: {
           compilers: [
             {
-              version: '0.8.13',
+              version: '0.8.17',
             },
           ],
         },
