@@ -1,14 +1,10 @@
-import { ethers, artifacts, network } from 'hardhat';
-import Web3 from 'web3';
-
-const rpc = "";
-const web3 = new Web3(new Web3.providers.HttpProvider(rpc));
+import { artifacts, ethers } from 'hardhat';
 
 //plug this after the running the deploy script
-const proxyAdminAddress = "";
-const tokenProxyAddress = "";
-const tokenImplementationAddress = ""; 
-const multiSig = ""; //the gnosis multisig owner
+const proxyAdminAddress = "0x4C027b58215725f330E029962c7A755313e19f4A";
+const tokenProxyAddress = "0xBBf1889f22d37640Bc70c58B2F643106db0542DE";
+const tokenImplementationAddress = "0xA12B17a5d26807Fdb97088C184A5b4cC833b6299"; 
+const multiSig = "0xcffA5805976762CE3a770879277981d9edec992F"; //the gnosis multisig owner
 
 const proxyAdminAbi = [{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"contract TransparentUpgradeableProxy","name":"proxy","type":"address"}],"name":"getProxyAdmin","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}];
 
@@ -19,7 +15,7 @@ async function main() {
 
     // Checksum bytecode
     const localByteCode = (await artifacts.readArtifact("GalaxyArenaToken")).deployedBytecode;
-    const remoteBytecode = await web3.eth.getCode(tokenImplementationAddress);
+    const remoteBytecode = await ethers.provider.getCode(tokenImplementationAddress);
     console.log("Is bytecode matching?", localByteCode === remoteBytecode);
 
     const galaxyArenaToken = await ethers.getContractAt("GalaxyArenaToken", tokenProxyAddress);

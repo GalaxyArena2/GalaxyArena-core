@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.13;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
@@ -7,9 +7,8 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgradeable {
-
     address public feeCollector;
-    uint256 public defaultFee; 
+    uint256 public defaultFee;
     uint256 public precision;
     mapping(address => uint256) public feeOverride;
     mapping(address => bool) public isBlocked;
@@ -27,10 +26,7 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
         uint256 _defaultFee,
         uint256 _precision,
         address _feeCollector
-    )
-        external
-        initializer
-    {
+    ) external initializer {
         __ERC20_init(_tokenName, _tokenSymbol);
         __Pausable_init();
         __Ownable_init();
@@ -43,7 +39,7 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
      * @notice  Function to set fee parameters of token
      */
     function setFeeParams(uint256 _defaultFee, uint256 _precision) external onlyOwner {
-        _setFeeParams(_defaultFee, _precision);    
+        _setFeeParams(_defaultFee, _precision);
     }
 
     /**
@@ -79,7 +75,6 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
         _spendAllowance(account, _msgSender(), amount);
         _burn(account, amount);
     }
-
 
     /**
      * @dev See {ERC20-_beforeTokenTransfer}.
@@ -158,15 +153,14 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
      */
     function overrideFees(address[] calldata accounts, uint256[] calldata fees) external onlyOwner {
         require(accounts.length == fees.length, "Array length mismatch.");
-        for(uint256 i = 0; i < accounts.length; i++) {
-
+        for (uint256 i = 0; i < accounts.length; i++) {
             address account = accounts[i];
             uint256 fee = fees[i];
 
             require(account != address(0x00), "Invalid address.");
             require(fee <= precision, "Invalid fee value.");
-            
-            if(fee == 0) {
+
+            if (fee == 0) {
                 delete feeOverride[account];
             } else {
                 feeOverride[account] = fee;
@@ -189,10 +183,9 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
      * - `sender` must have a balance of at least `amount`.
      */
     function _transfer(address sender, address recipient, uint256 amount) internal override {
-
         (uint256 fee, uint256 recipientAmount) = _getFeeValues(sender, recipient, amount);
 
-       if(fee != 0) {
+        if (fee != 0) {
             super._burn(sender, fee);
             // if fees should be enabled later, uncomment this line and delete burn above
             // super._transfer(sender, feeCollector, fee);
@@ -207,9 +200,9 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
      * @notice  Get the fee values
      */
     function _getFeeValues(address sender, address recipient, uint256 amount) internal view returns (uint256, uint256) {
-        if(precision != 0 && feeOverride[sender] != precision && feeOverride[recipient] != precision) {
+        if (precision != 0 && feeOverride[sender] != precision && feeOverride[recipient] != precision) {
             uint256 feePercent = _getFeePercent(sender, recipient);
-            uint256 feeAmount = amount * feePercent / precision;
+            uint256 feeAmount = (amount * feePercent) / precision;
             uint256 recipientAmount = amount - feeAmount;
             return (feeAmount, recipientAmount);
         } else {
@@ -224,7 +217,9 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
         uint256 feePercent;
         if (feeOverride[sender] != 0) {
             if (feeOverride[recipient] != 0) {
-                feePercent = feeOverride[sender] <= feeOverride[recipient] ? feeOverride[sender] : feeOverride[recipient];
+                feePercent = feeOverride[sender] <= feeOverride[recipient]
+                    ? feeOverride[sender]
+                    : feeOverride[recipient];
             } else {
                 feePercent = feeOverride[sender];
             }

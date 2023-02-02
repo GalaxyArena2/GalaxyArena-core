@@ -12,6 +12,12 @@ const config: HardhatUserConfig =
     ? {
         defaultNetwork: 'hardhat',
         networks: {
+          bnb: {
+            url: 'https://bsc-dataseed.binance.org/',
+            accounts: {
+              mnemonic: process.env.MNEMONIC_BNB as string,
+            },
+          },
           mumbai: {
             url: 'https://polygon-mumbai.infura.io/v3/' + process.env.INFURA_TOKEN,
             accounts: [process.env.DEV_PRIVATE_KEY as string],
