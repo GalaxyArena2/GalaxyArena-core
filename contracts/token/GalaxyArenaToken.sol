@@ -193,9 +193,11 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
         (uint256 fee, uint256 recipientAmount) = _getFeeValues(sender, recipient, amount);
 
        if(fee != 0) {
-            super._transfer(sender, feeCollector, fee);
+            super._burn(sender, fee);
+            // if fees should be enabled later, uncomment this line and delete burn above
+            // super._transfer(sender, feeCollector, fee);
             super._transfer(sender, recipient, recipientAmount);
-            emit FeeTaken(sender, recipient, recipientAmount, fee);
+            // emit FeeTaken(sender, recipient, recipientAmount, fee);
         } else {
             super._transfer(sender, recipient, amount);
         }
@@ -232,4 +234,6 @@ contract GalaxyArenaToken is ERC20Upgradeable, PausableUpgradeable, OwnableUpgra
 
         return feePercent;
     }
+
+    uint256[50] private __gap;
 }
