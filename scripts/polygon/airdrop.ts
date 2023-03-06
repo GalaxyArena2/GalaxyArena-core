@@ -2,8 +2,8 @@ require('dotenv').config();
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
-import { EssenceToken } from '../typechain';
-import { MultiSender } from '../typechain/MultiSender';
+import { EssenceToken } from '../../typechain';
+import { MultiSender } from '../../typechain/MultiSender';
 const fs = require('fs');
 
 // 1. 50% TGE, vesting 3 months

@@ -1,7 +1,7 @@
 require('dotenv').config();
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { ethers } from 'hardhat';
-import { EssenceToken } from '../typechain';
+import { EssenceToken } from '../../typechain';
 
 async function main(): Promise<void> {
   const signer: SignerWithAddress = (await ethers.getSigners())[0];
